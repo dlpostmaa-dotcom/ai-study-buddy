@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Study Buddy</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#101426;color:#fff;padding:22px}
+.container{max-width:650px;margin:auto}
+h1{color:#a99aff}
+.card{background:#202943;padding:20px;border-radius:16px;margin:16px 0}
+textarea,input{width:100%;padding:13px;border:0;border-radius:9px;margin:10px 0;background:#303c58;color:white}
+button{background:#8b75ff;color:white;border:0;padding:12px 17px;border-radius:9px;margin:5px;cursor:pointer}
+.result{white-space:pre-wrap;line-height:1.7;color:#dce4ff}
+.stat{display:inline-block;background:#303c58;padding:12px;border-radius:10px;margin:5px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>📚 AI Study Buddy</h1>
+<p>Your personal study companion.</p>
+
+<div class="card">
+<h3>📝 Create Study Notes</h3>
+<textarea id="topic" rows="5" placeholder="Paste your study material here..."></textarea>
+<button onclick="makeNotes()">Create Notes</button>
+<button onclick="makeQuiz()">Generate Quiz</button>
+<button onclick="makeCards()">Make Flashcards</button>
+<div id="result" class="result"></div>
+</div>
+
+<div class="card">
+<h3>🎯 Study Progress</h3>
+<div class="stat">Completed: <span id="count">0</span></div>
+<button onclick="complete()">Complete Study Session ✓</button>
+<button onclick="resetProgress()">Reset Progress</button>
+</div>
+</div>
+
+<script>
+let progress=Number(localStorage.getItem("progress")||0);
+document.getElementById("count").textContent=progress;
+
+function getText(){
+return document.getElementById("topic").value.trim();
+}
+
+function makeNotes(){
+let t=getText();
+if(!t)return alert("Enter some study material first!");
+let sentences=t.split(/[.!?]+/).filter(x=>x.trim());
+document.getElementById("result").textContent=
+"📖 YOUR STUDY NOTES\n\n"+sentences.map((s,i)=>(i+1)+". "+s.trim()).join("\n\n");
+}
+
+function makeQuiz(){
+let t=getText();
+if(!t)return alert("Enter some study material first!");
+let sentences=t.split(/[.!?]+/).filter(x=>x.trim());
+document.getElementById("result").textContent=
+"🧠 PRACTICE QUESTIONS\n\n"+sentences.map((s,i)=>(i+1)+". Explain this concept: "+s.trim()).join("\n\n");
+}
+
+function makeCards(){
+let t=getText();
+if(!t)return alert("Enter some study material first!");
+let sentences=t.split(/[.!?]+/).filter(x=>x.trim());
+document.getElementById("result").textContent=
+"🗂️ FLASHCARDS\n\n"+sentences.map((s,i)=>"CARD "+(i+1)+"\nQuestion: What do you understand about this concept?\nAnswer: "+s.trim()).join("\n\n");
+}
+
+function complete(){
+progress++;
+localStorage.setItem("progress",progress);
+document.getElementById("count").textContent=progress;
+}
+
+function resetProgress(){
+progress=0;
+localStorage.setItem("progress",0);
+document.getElementById("count").textContent=0;
+}
+</script>
+</body>
+</html>
